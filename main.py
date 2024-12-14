@@ -200,7 +200,7 @@ def main():
     if args.show is not None:
         manager.do_show(str(args.show))
     if args.exit:
-        InventoryManager.do_exit(None)
+        manager.do_exit(None)
 
     # If no arguments are provided, start the interactive mode
     if not any(vars(args).values()):
