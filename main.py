@@ -142,6 +142,15 @@ class InventoryManager(Cmd):
         except ValueError:
             print_error("Please provide a valid number of rows.")
 
+    @staticmethod
+    def do_exit(arg):
+        """
+               Exit the program.
+               Syntax: exit
+               """
+        print_success("Exiting the Inventory Manager. Goodbye!")
+        return True
+
 def main():
     """Entry point for the Inventory Manager CLI.
 
@@ -150,6 +159,7 @@ def main():
     - '--search': Search for a product or category (column=value).
     - '--summary': Generate and save a summary report.
     - '--show': Display the first N rows of the inventory.
+    - '--exit': Exit the program.
 
     If no arguments are provided, starts the interactive mode.
     """
@@ -172,6 +182,11 @@ def main():
         type=int,
         help="Display the first N rows of the inventory"
     )
+    parser.add_argument(
+        "--exit",
+        action="store_true",
+        help="Exit the program."
+    )
 
     args = parser.parse_args()
     manager = InventoryManager()
@@ -184,6 +199,8 @@ def main():
         manager.do_summary(args.summary)
     if args.show is not None:
         manager.do_show(str(args.show))
+    if args.exit:
+        InventoryManager.do_exit(None)
 
     # If no arguments are provided, start the interactive mode
     if not any(vars(args).values()):
