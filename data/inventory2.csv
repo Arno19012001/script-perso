@@ -1,0 +1,21 @@
+product_id,product_name,category,quantity,unit_price
+21,Monitor,Electronics,30,149.99
+22,Printer,Electronics,10,89.99
+23,Desk Chair,Furniture,50,129.99
+24,Standing Desk,Furniture,8,349.99
+25,Mechanical Keyboard,Electronics,40,59.99
+26,3D Printer,Electronics,5,999.99
+27,Drawing Tablet,Electronics,15,349.99
+28,Eraser,Stationery,300,0.25
+29,Glue,Stationery,200,1.49
+30,Clipboard,Stationery,120,2.99
+31,Paper Shredder,Office,10,74.99
+32,File Cabinet,Office,7,249.99
+33,Lamp,Office,20,29.99
+34,Desk Organizer,Office,40,14.99
+35,Ruler,Stationery,250,0.99
+36,Mouse Pad,Electronics,120,7.99
+37,Power Bank,Electronics,60,34.99
+38,Projector,Electronics,12,499.99
+39,Conference Table,Furniture,3,899.99
+40,Magazine Rack,Furniture,20,49.99
