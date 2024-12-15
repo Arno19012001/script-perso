@@ -22,7 +22,7 @@ def print_error(message):
 
 def print_success(message):
     """
-    Print a green success message
+    Print a green success message.
 
     PRE: `message` is a non-empty string.
     POST: The message is printed in green to the console.
@@ -31,7 +31,8 @@ def print_success(message):
 
 def print_info(message):
     """
-    Print a blue info message
+    Print a blue info message.
+
     PRE: `message` is a non-empty string.
     POST: The message is printed in blue to the console.
     """
