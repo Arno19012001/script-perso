@@ -3,6 +3,7 @@ import os
 import pandas as pd
 from io import StringIO
 from main import InventoryManager
+import sys
 
 
 class TestInventoryManager(unittest.TestCase):
@@ -10,6 +11,27 @@ class TestInventoryManager(unittest.TestCase):
     def setUp(self):
         """Set up a test instance of InventoryManager."""
         self.manager = InventoryManager()
+
+    def capture_output(self, func, *args, **kwargs):
+        """
+        Utility method to capture stdout during function execution.
+
+        Args:
+            func (callable): The function to execute.
+            *args: Positional arguments for the function.
+            **kwargs: Keyword arguments for the function.
+
+        Returns:
+            str: Captured output from stdout.
+        """
+        captured_output = StringIO()
+        original_stdout = sys.stdout  # Save the original stdout
+        sys.stdout = captured_output  # Redirect stdout
+        try:
+            func(*args, **kwargs)
+        finally:
+            sys.stdout = original_stdout  # Restore the original stdout
+        return captured_output.getvalue()
 
     def test_load_valid_files(self):
         """Test loading valid CSV files into the inventory."""
@@ -20,9 +42,10 @@ class TestInventoryManager(unittest.TestCase):
         with open('test_data/file2.csv', 'w') as f:
             f.write("category,quantity,unit_price\nA,15,6.0\nC,5,8.0")
 
-        self.manager.do_load('test_data')
+        output = self.capture_output(self.manager.do_load, 'test_data')
+        self.assertIn("Loaded: file1.csv", output)
+        self.assertIn("All CSV files have been consolidated.", output)
         self.assertEqual(len(self.manager.inventory), 4)
-        self.assertIn('category', self.manager.inventory.columns)
 
         # Clean up
         os.remove('test_data/file1.csv')
@@ -31,7 +54,8 @@ class TestInventoryManager(unittest.TestCase):
 
     def test_load_invalid_folder(self):
         """Test loading from an invalid folder path."""
-        self.manager.do_load('nonexistent_folder')
+        output = self.capture_output(self.manager.do_load, 'nonexistent_folder')
+        self.assertIn("Folder not found.", output)
         self.assertTrue(self.manager.inventory.empty)
 
     def test_search_existing_value(self):
@@ -39,25 +63,24 @@ class TestInventoryManager(unittest.TestCase):
         data = """category,quantity,unit_price\nA,10,5.5\nB,20,7.0\n"""
         self.manager.inventory = pd.read_csv(StringIO(data))
 
-        with self.assertLogs(level='INFO') as log:
-            self.manager.do_search('category=A')
-        self.assertTrue(any("A" in message for message in log.output))
+        output = self.capture_output(self.manager.do_search, 'category=A')
+        self.assertIn("A", output)
 
     def test_search_nonexistent_value(self):
         """Test searching for a value that does not exist in the inventory."""
         data = """category,quantity,unit_price\nA,10,5.5\nB,20,7.0\n"""
         self.manager.inventory = pd.read_csv(StringIO(data))
 
-        with self.assertLogs(level='INFO') as log:
-            self.manager.do_search('category=Z')
-        self.assertTrue(any("No results found" in message for message in log.output))
+        output = self.capture_output(self.manager.do_search, 'category=Z')
+        self.assertIn("No results found.", output)
 
     def test_summary(self):
         """Test generating a summary report."""
         data = """category,quantity,unit_price\nA,10,5.5\nA,15,6.0\nB,20,7.0\n"""
         self.manager.inventory = pd.read_csv(StringIO(data))
 
-        self.manager.do_summary('summary_test.csv')
+        output = self.capture_output(self.manager.do_summary, 'summary_test.csv')
+        self.assertIn("Summary report exported to summary_test.csv.", output)
         self.assertTrue(os.path.exists('summary_test.csv'))
         os.remove('summary_test.csv')
 
@@ -66,14 +89,15 @@ class TestInventoryManager(unittest.TestCase):
         data = """category,quantity,unit_price\nA,10,5.5\nB,20,7.0\nC,5,8.0\n"""
         self.manager.inventory = pd.read_csv(StringIO(data))
 
-        with self.assertLogs(level='INFO') as log:
-            self.manager.do_show('2')
-        self.assertTrue(any("A" in message for message in log.output))
-        self.assertTrue(any("B" in message for message in log.output))
+        output = self.capture_output(self.manager.do_show, '2')
+        self.assertIn("A", output)
+        self.assertIn("B", output)
 
 
 if __name__ == '__main__':
     unittest.main()
+
+
 
 
 
