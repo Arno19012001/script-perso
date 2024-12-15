@@ -12,15 +12,29 @@ from colorama import Fore, Style, init
 init(autoreset=True)
 
 def print_error(message):
-    """Red error message"""
+    """
+    Print a red error message.
+
+    PRE: `message` is a non-empty string.
+    POST: The message is printed in red to the console.
+    """
     print(Fore.RED + message + Style.RESET_ALL)
 
 def print_success(message):
-    """Green success message"""
+    """
+    Print a green success message
+
+    PRE: `message` is a non-empty string.
+    POST: The message is printed in green to the console.
+    """
     print(Fore.GREEN + message + Style.RESET_ALL)
 
 def print_info(message):
-    """Blue info message"""
+    """
+    Print a blue info message
+    PRE: `message` is a non-empty string.
+    POST: The message is printed in blue to the console.
+    """
     print(Fore.BLUE + message + Style.RESET_ALL)
 
 class InventoryManager(Cmd):
@@ -33,6 +47,12 @@ class InventoryManager(Cmd):
     prompt = "(inventory) "
 
     def __init__(self):
+        """
+        Initialize the Inventory Manager.
+
+        PRE: None.
+        POST: `self.inventory` is initialized as an empty DataFrame.
+        """
         super().__init__()
         self.inventory = pd.DataFrame()
 
@@ -40,6 +60,9 @@ class InventoryManager(Cmd):
         """
         Load CSV files into a unified database.
         Syntax: load <folder_containing_files>
+
+        PRE: `folder_path` is a valid string representing a folder path.
+        POST: CSV files in the folder are loaded into the inventory.`
         """
         folder_path = folder_path.strip()
         if not os.path.isdir(folder_path):
@@ -71,6 +94,9 @@ class InventoryManager(Cmd):
         """
         Search for a product or category.
         Syntax: search <column=value>
+
+        PRE: `query` is in the format "column=value".
+        POST: Prints matching rows or a message if no match is found.
         """
         if self.inventory.empty:
             print_error("The database is empty. Load data first.")
@@ -101,6 +127,9 @@ class InventoryManager(Cmd):
         """
         Generate a summary report.
         Syntax: summary
+
+        PRE: `self.inventory` contains the required columns ('category', 'quantity', 'unit_price').
+        POST: Prints a summary report and saves it to `save_path`.
         """
         if self.inventory.empty:
             print_error("The database is empty. Load data first.")
@@ -131,6 +160,9 @@ class InventoryManager(Cmd):
         """
         Display the first rows of the consolidated database.
         Syntax: show <number_of_rows>
+
+        PRE: `n` is a positive integer.
+        POST: Prints the first `n` rows of the inventory.
         """
         if self.inventory.empty:
             print_error("The database is empty. Load data first.")
@@ -145,9 +177,12 @@ class InventoryManager(Cmd):
     @staticmethod
     def do_exit(arg):
         """
-               Exit the program.
-               Syntax: exit
-               """
+        Exit the program.
+        Syntax: exit
+
+        PRE: None.
+        POST: Terminates the CLI session.
+        """
         print_success("Exiting the Inventory Manager. Goodbye!")
         return True
 
@@ -162,6 +197,9 @@ def main():
     - '--exit': Exit the program.
 
     If no arguments are provided, starts the interactive mode.
+
+    PRE: Arguments are valid if provided.
+    POST: Executes the corresponding CLI command or starts the interactive mode.
     """
 
     parser = argparse.ArgumentParser(description="Inventory Manager CLI")
