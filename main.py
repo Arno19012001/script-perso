@@ -72,7 +72,9 @@ class InventoryManager(Cmd):
         Syntax: load <folder_containing_files>
 
         PRE: `folder_path` is a valid string representing a folder path.
-        POST: CSV files in the folder are loaded into the inventory.`
+        POST:
+         - CSV files in the folder are loaded into the inventory.
+         - Prints an error if the folder is invalid or contains no valid files.
         """
         folder_path = folder_path.strip()
         if not os.path.isdir(folder_path):
@@ -106,7 +108,9 @@ class InventoryManager(Cmd):
         Syntax: search <column=value>
 
         PRE: `query` is in the format "column=value".
-        POST: Prints matching rows or a message if no match is found.
+        POST:
+         - Prints matching rows or a message if no match is found.
+         - Prints an error if synthax is incorrect or column is invalid.
         """
         if self.inventory.empty:
             print_error("The database is empty. Load data first.")
@@ -139,7 +143,9 @@ class InventoryManager(Cmd):
         Syntax: summary
 
         PRE: `self.inventory` contains the required columns ('category', 'quantity', 'unit_price').
-        POST: Prints a summary report and saves it to `save_path`.
+        POST:
+         - Prints a summary report and saves it to `save_path`.
+         - Prints an error if required columns are missing.
         """
         if self.inventory.empty:
             print_error("The database is empty. Load data first.")
@@ -172,7 +178,9 @@ class InventoryManager(Cmd):
         Syntax: show <number_of_rows>
 
         PRE: `n` is a positive integer.
-        POST: Prints the first `n` rows of the inventory.
+        POST:
+         - Prints the first `n` rows of the inventory.
+         - Prints an error if `n` is not valid integer.
         """
         if self.inventory.empty:
             print_error("The database is empty. Load data first.")
