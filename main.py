@@ -2,14 +2,17 @@
 This module provides a command-line
 interface for managing an inventory system.
 """
+
 import argparse
 import os
 from cmd import Cmd
 import pandas as pd
 from colorama import Fore, Style, init
 
+
 # Initialize colorama
 init(autoreset=True)
+
 
 def print_error(message):
     """
@@ -20,6 +23,7 @@ def print_error(message):
     """
     print(Fore.RED + message + Style.RESET_ALL)
 
+
 def print_success(message):
     """
     Print a green success message.
@@ -28,6 +32,7 @@ def print_success(message):
     POST: The message is printed in green to the console.
     """
     print(Fore.GREEN + message + Style.RESET_ALL)
+
 
 def print_info(message):
     """
@@ -38,13 +43,17 @@ def print_info(message):
     """
     print(Fore.BLUE + message + Style.RESET_ALL)
 
+
 class InventoryManager(Cmd):
     """
     A command-line interface for loading,
     searching, summarizing, and displaying inventory data.
     """
-    intro = ("\nWelcome to the Inventory Manager."
-             "Type 'help' or '?' to see available commands.\n")
+
+    intro = (
+        "\nWelcome to the Inventory Manager."
+        "Type 'help' or '?' to see available commands.\n"
+    )
     prompt = "(inventory) "
 
     def __init__(self):
@@ -187,6 +196,7 @@ class InventoryManager(Cmd):
         print_success("Exiting the Inventory Manager. Goodbye!")
         return True
 
+
 def main():
     """Entry point for the Inventory Manager CLI.
 
@@ -244,6 +254,7 @@ def main():
     # If no arguments are provided, start the interactive mode
     if not any(vars(args).values()):
         manager.cmdloop()
+
 
 if __name__ == "__main__":
     main()
